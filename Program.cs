@@ -1,4 +1,6 @@
-﻿namespace RPG
+﻿using System.Net.NetworkInformation;
+
+namespace RPG
 {
     internal class Program
     {
@@ -6,11 +8,12 @@
         static void Main(string[] args)
         {
             Start();
-            Encounters.FirstEncounter();
+            //Encounters.FirstEncounter();
         }
 
 
         /*TODO: - After shop is created, adjust Noble and Rogue money benefit (career starting cash / extra money after battle)
+         *      - create an inventory (can just be an array tbh) that lets player collect items and have code see if a given item is in the inventory for extra dialogue
          */
 
         static void Start()
@@ -19,24 +22,23 @@
             bool ancestChoice = false;
             bool careerChoice = false;
             char choice;
-            char subchoice;
-            char dreamChoice;
             //Preamble
             //Console.ReadKey(); //delete this - for showing people and the screen share isn't quick enough
             Anim.Say(
                 "The Shopkeeper\n" +
                 "A medival fantasy shop-em-up by <Some Cunt>\n" +
-                "\n" +
-                "First, Adventurer, tell me about yourself. What is your name?"
+                "\n" //+
+                //"First, Adventurer, tell me about yourself. What is your name?\n"
                 );
-            currentPlayer.playerName = Console.ReadLine();
+            /*currentPlayer.playerName = Console.ReadLine();
             if (currentPlayer.playerName == "")
             {
                 currentPlayer.playerName = "Dumpy";
-                Anim.Say("Ah. A secret, is it? Well, in that case you will be called \"Dumpy\"");
+                Anim.Say("Ah. A secret, is it? Well, in that case you will be called \"Dumpy\"\n");
             }
             Anim.Say(
                 $"{currentPlayer.playerName}, tell me, which skin do you call yours?\n" +
+                 "[Avian] - Cunning feathered people. Collect more coin after battles.\n" +
                  "[Chelonian] - A proud Tortoisefolk. Your shell protects you from damage.\n" +
                  "[Dwarf] - A people sturdy in body and stubborn of will. You start with more health.\n" +
                  "[Elf] - A lot of these about. Too many, if you ask me. Allrounders.\n" +
@@ -49,6 +51,10 @@
                 currentPlayer.currentAncestry = Console.ReadLine().ToLower();
                 switch (currentPlayer.currentAncestry)
                 {
+                    case "avian": //bird. more money after fights. CHANGE TO SOMETHING BETTER LATER
+                        Anim.Say("Easily distracted by shiny things.");
+                        currentPlayer.playerMoneyIncrease += 5;
+                        break;
                     case "chelonian": //turtle. physical def bonus
                         Anim.Say("A hard-shelled one.");
                         currentPlayer.playerFort += 1;
@@ -70,7 +76,7 @@
                         currentPlayer.playerCharm += 1;
                         break;
                     default: //on invalid input
-                        Anim.Say("You'll have to choose one by writing it out");
+                        Anim.Say("You'll have to choose one by writing it out\n");
                         ancestChoice = false;
                         break;
                 }
@@ -92,35 +98,35 @@
                 switch (currentPlayer.currentCareer)
                 {
                     case "beserker": //base attack bonus
-                        Anim.Say("A ferocious foe.");
+                        Anim.Say("A ferocious foe. ");
                         currentPlayer.playerPow += 1;
                         break;
                     case "commoner": //no bonus
-                        Anim.Say("Greatness comes from humble beginnings.");
+                        Anim.Say("Greatness comes from humble beginnings. ");
                         break;
                     //Add Duelist, Counter +1
                     case "guard": //starts with armour
-                        Anim.Say("A shield incarnate.");
+                        Anim.Say("A shield incarnate. ");
                         currentPlayer.playerArmour = 1;
                         break;
                     case "noble": //munneh
-                        Anim.Say("Feeling responsibilities, are we?");
+                        Anim.Say("Fleeing responsibilities, are we? ");
                         currentPlayer.playerMoney += 50; //contextless value. Adjust when shops are implemented
                         break;
                     case "rogue": //Adds fixed amount to money after battle. CHANGE TO %?
-                        Anim.Say("Make them pay.");
+                        Anim.Say("Make them pay. ");
                         currentPlayer.playerMoneyIncrease += 5; //contextless value. Adjust when shops are implemented
                         break;
                     case "swindler":
-                        Anim.Say("A disarming smile can be a weapon in itself.");
+                        Anim.Say("A disarming smile can be a weapon in itself. ");
                         currentPlayer.playerCharm += 1;
                         break;
                 }
             }
-
-            Anim.Say(
+            */
+            Anim.Say("\n" +
                 "You wake up in your room. It's a shabby, simple bedroom. The light plays through the cracked window " +
-                "upon a miriade of slow dancing dust particles. On your left, your sword leans against the night stand " +
+                "upon a miriade of slow dancing dust particles. On your left, your coin purse sits on the night stand " +
                 "as a moth flees your closet.\n"
             );
             //choice point: beginning
@@ -136,16 +142,21 @@
                     "You quickly push the blanket to the side. Always having been one to get things over quickly, you get dressed " +
                     "and ready.\n"
                     );
-                    goto LEAVE_ROOM;
+                    LeaveRoom();
+                    break;
                 //take moment
                 case 'b':
                     Anim.Say("\n" +
                     "Slowly letting the sleep drift from you, you get another cozy moment under the blankets. As the light filters " +
                     "through your window and brings you into reality, you remember the payment for your last adventure. The small " +
-                    "pouch with coins sits atop the nightstand. With soft, gentle movements, you get ready. As you collect your things " +
-                    "and leave the room, a stiff, cold breeze brushes along your neck. Today may be a bit of a fresh spring morning. " +
-                    "Hopefully it clears up over the next few hours.\n"
+                    "pouch with coins sits atop the nightstand. With soft, gentle movements, you get ready.\n" +
+                    "You collect your things and leave the room. Today may be a bit of a cloudy spring morning, just like yesterday. " +
+                    "Hopefully it clears up over the next few hours.\n" +
+                    "" +
+                    "You gain 100 Gold"
                     );
+                    Program.currentPlayer.playerMoney += 100;
+                    Outside();
                     break;
                 //five more minutes
                 case 'c':
@@ -158,78 +169,84 @@
                     "You suddenly notice that you stand here, buck-naked. As blood rushes to your head, you notice that the branches of the " +
                     "tree are not just populated by leaves. Among them are a lot of woodnymphs. They are looking directly at you.\n"
                     );
-                    goto DREAM;
+                    Dream();
+                    break;
                 //other
-                default: Anim.Say("You just lay there, unable to choose. Existance can be scary.\n"); goto GAME_OVER;
+                default: Anim.Say("You just lay there, unable to choose. Existance can be scary.\n"); GameOver(); break;
+            }
+            void LeaveRoom()
+            {
+                //choice point: leave room
+                Anim.Say("[t]ake a look around - [l]eave\n");
+                choice = Console.ReadKey().KeyChar;
+                switch (choice)
+                {
+                    //look around
+                    case 't':
+                        Anim.Say("\n" +
+                        "As you give the room another look, you remember your coin purse! You take it and step out.\n"
+                        );
+                        currentPlayer.playerMoney += 100;
+                        Anim.Say($"You gain 100 coins.\n");
+                        Outside();
+                        break;
+                    //leave
+                    case 'l':
+                        Anim.Say("\n" +
+                            "No time to dwell, you get your coat and leave your small abode.\n"
+                            );
+                        Outside();
+                        break;
+                    //other
+                    default:
+                        Anim.Say("\n" +
+                            "You just... stand there. A while later, you blink, shake your head and wonder how long you've been zoned out as you leave\n"
+                            );
+                        break;
+                }
             }
 
-LEAVE_ROOM:
-            //choice point: leave room
-            Anim.Say("[t]ake a look around - [l]eave\n");
-            subchoice = Console.ReadKey().KeyChar;
-            switch (subchoice)
+            void Dream()
             {
-                //look around
-                case 't':
-                    Anim.Say("\n" +
-                    "As you give the room another look, you remember your coin purse and your sword! You take both and step out.\n"
-                    );
-                    currentPlayer.playerMoney = 100;
-                    Anim.Say($"You have {currentPlayer.playerMoney} coins and your trusty sword in your inventory.\n");
-                    break;
-                //leave
-                case 'l':
-                    Anim.Say("\n" +
-                        "No time to dwell, you get your coat and leave your small abode.\n"
+                Anim.Say("[p]resent yourself confidently - [h]ide yourself as best you can - [d]emand to know what they're doing, ogling you like this\n");
+                choice = Console.ReadKey().KeyChar;
+                switch (choice)
+                {
+                    //present confidently
+                    case 'p':
+                        Anim.Say("\n");
+                        break;
+                    //hide
+                    case 'h':
+                        Anim.Say("\n" +
+                        "Thinking quickly, you dart to a close bush. It's a bit scratchy, but you feel safe now. As you look up, most of the nymphs have either " +
+                        "left or just vanished (as dreams tend to do), but one remains. They have buried their face in their hands. As the wind gently roams " +
+                        "around them, you can't help to feel drawn to them. Their fuller form, cracked bark-skin and beautifully autumnal leaves just speak to you. " +
+                        "You notice that you are now the one ogling and quickly look down to the grass. Just as you feel the confidence to talk to them, they raise " +
+                        "their head from their hands. You see a beautiful face, eyes shyly darting to your direction.\n They smile, open their mouth and greet " +
+                        "you with a soft\n" +
+                        "\"PIG GUTS! FRESH AND LOVELY PIG GUTS!\"\n" +
+                        "You jerk awake, damning the butcher next door for waking you so rudely. You are about to throw the blanket to the side and really tell " +
+                        "him your opinion, but before you can something faintly touches the back of your hand.\n" +
+                        "It is a single leaf that must've been blown in through your window. It has the most beautiful sunset-red colouration you have ever seen. " +
+                        "\'How odd.\' you think, \'Isn't it Spring?\'\n" +
+                        "Whatever the case may be, you decide to take it with you. It's really beautiful.\n"
                         );
-                    goto OUTSIDE;
-                //other
-                default:
-                    Anim.Say("\n" +
-                        "You just... stand there. A while later, you blink, shake your head and wonder how long you've been zoned out as you leave\n"
+                        //ADD: Soph-miro's Leaf to inventory (The nymph's leaf, named after extinct Sophora Toromiro Tree)
+                        break;
+                    //demand answers
+                    case 'd':
+                        Anim.Say("\n" +
+                        "\"What are you gawking at, huh?\" your voice rings out over the long grass, starling the woodland creatures. \"At least " +
+                        "say something nice!\" Surprised that a mortal would talk to them this way, most of them seem to vanish into the canopy. One stays. " +
+                        "Their body is covered with brilliant flowers of all shapes and colours. They give you a daring smirk, tilt their head and call out: " +
+                        "\"Oh, there is nice to be said about me, but you? How could a mere human like you even know the word beautiful before meeting me? " +
+                        "Much less think they should be compared such?\"\n" +
+                        "What do you answer?\n" +
+                        "\"[I] said something nice, not beautiful. However did you come to that conclusion?\" (daring the nymph)\n\"[U]h, please don't mind me!\" (retreating)\n"
                         );
-                    break;
-                }
-DREAM:
-            Anim.Say("[p]resent yourself confidently - [h]ide yourself as best you can - [d]emand to know what they're doing, ogling you like this\n");
-            dreamChoice = Console.ReadKey().KeyChar;
-            switch (dreamChoice)
-            {
-                //present confidently
-                case 'p':
-                    Anim.Say("\n");
-                    break;
-                //hide
-                case 'h':
-                    Anim.Say("\n" +
-                    "Thinking quickly, you dart to a close bush. It's a bit scratchy, but you feel safe now. As you look up, most of the nymphs have either " +
-                    "left or just vanished (as dreams tend to do), but one remains. They have buried their face in their hands. As the wind gently roams " +
-                    "around them, you can't help to feel drawn to them. Their fuller form, cracked bark-skin and beautifully autumnal leaves just speak to you " +
-                    "You notice that you are now the one ogling and quickly look down to the grass. Just as you feel the confidence to talk to them, they raise " +
-                    "their head from their hands. You see a beautiful face, eyes shyly darting to your direction.\n They smile, open their mouth and greet " +
-                    "you with a soft\n" +
-                    "\"PIG GUTS! FRESH AND LOVELY PIG GUTS!\"\n" +
-                    "You jerk awake, damning the butcher next door for waking you so rudely. You are about to throw the blanket to the side and really tell " +
-                    "him your opinion, but before you can something faintly touches the back of your hand.\n" +
-                    "It is a single leaf that must've been blown in through your window. It has the most beautiful sunset-red colouration you have ever seen. " +
-                    "\'How odd.\' you think, \'Isn't it Spring?\'\n" +
-                    "Whatever the case may be, you decide to take it with you. It's really beautiful.\n"
-                    );
-                    //ADD: Soph-miro's Leaf to inventory (The nymph's leaf, named after extinct Sophora Toromiro Tree)
-                    break;
-                //demand answers
-                case 'd':
-                    Anim.Say("\n" +
-                    "\"What are you gawking at, huh?\" your voice rings out over the long grass, starling the woodland creatures. \"At least " +
-                    "say something nice!\" Surprised that a mortal would talk to them this way, most of them seem to vanish into the canopy. One stays. " +
-                    "Their body is covered with brilliant flowers of all shapes and colours. They give you a daring smirk, tilt their head and call out: " +
-                    "\"Oh, there is nice to be said about me, but you? How could a mere human like you even know the word beautiful before meeting me? " +
-                    "Much less think they should be compared such?\"\n" +
-                    "What do you answer?\n" +
-                    "\"[I] said something nice, not beautiful. However did you come to that conclusion?\" (daring the nymph)\n\"[U]h, please don't mind me!\" (retreating)\n"
-                    );
-                        subchoice = Console.ReadKey().KeyChar;
-                        switch (subchoice)
+                        choice = Console.ReadKey().KeyChar;
+                        switch (choice)
                         {
                             //dare the nymph
                             case 'i':
@@ -254,25 +271,110 @@ DREAM:
                                     );
                                 break;
                             //other
-                            default: Anim.Say("You stand there, your mouth agape. The nymph's expression quickly changes to disappointment. They are in a foul mood and not keen to keep you around. Do you know what happens when you die in a dream? You \n"); goto GAME_OVER;
+                            default: Anim.Say("You stand there, your mouth agape. The nymph's expression quickly changes to disappointment. They are in a foul mood and not keen to keep you around. Do you know what happens when you die in a dream? You \n"); GameOver(); break;
                         }
-                    break;
-                        //other
-                        default:
-                            Anim.Say("\n" +
-                            "Unable to decide, you freeze in the wind that was so refreshing just a moment earlier. " +
-                            "You start to hear laughter. First restrained, but quickly getting louder and nastier. \"They don't even have leaves!\" \"Like a slug!\" " +
-                            "\"They look like they should be a politicizer!\" For dream reasons, these banal insults punch through to you. Their laughter now cackling " +
-                            "and eerie, their bodies contorting and breaking with disgusting fleshy sounds. They morph into one form. A wall of viscera and a smell of " +
-                            "seriously acidic apple wine flood over you. You shut your eyes and-\n"
-                            );
-                            goto GAME_OVER;
-                    }
-OUTSIDE:
-            Anim.Say("This is where more content goes :3\n");
+                        break;
+                    //other
+                    default:
+                        Anim.Say("\n" +
+                        "Unable to decide, you freeze in the wind that was so refreshing just a moment earlier. " +
+                        "You start to hear laughter. First restrained, but quickly getting louder and nastier. \"They don't even have leaves!\" \"Like a slug!\" " +
+                        "\"They look like they should be a politicizer!\" For dream reasons, these banal insults punch through to you. Their laughter now cackling " +
+                        "and eerie, their bodies contorting and breaking with disgusting fleshy sounds. They morph into one form. A wall of viscera and a smell of " +
+                        "seriously acidic apple wine flood over you. You shut your eyes and-\n"
+                        );
+                        GameOver();
+                        break;
+                }
+            }
+            
+            void Outside()
+            {
+                //Console.Clear(); //clear console from previous text
+                Anim.Say("\n" +
+                    "As you leave, you feel the reassuring pressure of the ring on your finger.\n" +
+                    "This is a (Ring of Weapons)\n" +
+                    "The Ring of Weapons can shift into anything you want to use as a weapon. It can also absorb any future weapon you find, " +
+                    "gaining the benefits of that weapon while still retaining the shape you've chosen.\n" +
+                    "So, what will it be?\n"
+                    );
+                    currentPlayer.weaponName = Console.ReadLine(); //get form of weapon from player. Yes, this can result in stupid stuff. But let the player have fun.
 
-GAME_OVER:
-            Anim.Say("GAME OVER\n");
+                while (currentPlayer.weaponName == "")
+                {
+                    Anim.Say("Don't be afraid to choose.\n");
+                    currentPlayer.weaponName = Console.ReadLine(); //get form of weapon from player. Yes, this can result in stupid stuff. But let the player have fun.
+                }
+                Anim.Say($"A small glyph depicting a stylized {currentPlayer.weaponName} appears on the ring, barely noticable. " +
+                    $"You ready yourself for adventure.\n");
+                Anim.Say(
+                    "A fresh breeze blows as the town begins to bustle with life. You already hear the creaking merchant carts roll by, " +
+                    "sellers calling out their wares and birds chirping friendly songs. At the corner, you see the three old Debating Men " +
+                    "(as most people affectionatelly call them). Like always, they are already deep in a discussion, though the subject is hard " +
+                    "to make out at this distance. In the other direction, you see a child struggling to lift a bucket out of the town well.\n" +
+                    "What do you do?\n" +
+                    "[a] go to the market - [b] listen in on the debate - [c] see if the kid needs help\n"
+                    );
+                choice = Console.ReadKey().KeyChar;
+                switch (choice)
+                {
+                    case 'a': //go to market
+                        Anim.Say("MARKET STUFF");
+                        break;
+                    case 'b': //listen to debate
+                        Anim.Say("OLD PEOPLE DEBATE");
+                        break;
+                    case 'c': //see if kid needs help
+                        Anim.Say(
+                            "You mosey over to the well. The child is grunting and cursing, as she contineously tries to lift the " +
+                            "heavy bucket and fails. \"Bwooming gwove! Why ahh you so heaby?\" she cusses as you arrive.\n" +
+                            "[a] ask if she needs help - [b] grab the bucket - [c] look for her parents\n");
+                        choice = Console.ReadKey().KeyChar;
+                        Anim.Say(""); //spacer
+                        switch (choice)
+                        {
+                            case 'a': //help
+                                Anim.Say(
+                                    "\"Do you need help, young lady?\". She tries again and fails again before answering. \"Yea. " +
+                                    "But I wanna do it myself!, I need to be stwong!\" She hasn't looked up, her eyes fixed on the " +
+                                    "bucket she clutches with two tiny hands.\n" +
+                                    "[a] \"Strong? What for?\" - [b] Just grab the bucket - [c]\"Then you have to do it.\"\n");
+                                choice = Console.ReadKey().KeyChar;
+                                switch (choice)
+                                {
+                                    case 'a': //help
+                                        Anim.Say(
+                                            "As you ask that, she grabs the bucket tighter. \"Mama said that. She is in bed. She is" +
+                                            "in bed a lot.\" Finally, she looks up with determination in her eyes. \"So I said I will" +
+                                            "be stwongah dan eben de Backsmif!\"");
+                                        break;
+                                    case 'b': //help
+                                        Anim.Say("");
+                                        break;
+                                    case 'c': //help
+                                        Anim.Say("");
+                                        break;
+                                    default: Anim.Say(""); break;
+                                }
+                                break;
+                            case 'b': //grab bucket
+                                Anim.Say("");
+                                break;
+                            case 'c': //look for parents
+                                Anim.Say("");
+                                break;
+                            default: Anim.Say(""); GameOver(); break;
+                        }
+                        break;
+                    default: Anim.Say(""); GameOver(); break;
+                }
+            }
+
+
+            void GameOver()
+            {
+                Anim.Say("GAME OVER\n");
+            }
         }
     }
 }

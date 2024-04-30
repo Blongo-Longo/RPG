@@ -16,7 +16,7 @@ namespace RPG
                 ""
                 );
             Console.ReadKey();
-            GeneralEncounter(false, true, false, "Human Rogue", "", 5, 4, 4, 1, 1, 1);
+            GeneralEncounter(false, true, false, "Human Rogue", "", 5, 4, 4, 3, 1, 2);
         }
         /*TODO: - FINISH TUTORIAL
          *      - SEE HOW TO ADD INVENTORY
@@ -28,7 +28,7 @@ namespace RPG
         public static void GeneralEncounter(
             bool hostile, bool enemyMoney, bool enemyItem, //enemyMoney -> does this entity have cash? | enemyItem -> does this enemy have something worth looting?
             string enemyName, string lootableItem, int lootableMoneyMax, //lootableItem -> the drops you can get | lootableMoneyMax -> maximum possible payout if the enemy has cash
-            int enemyMaxHP, int enemyCurHP,  int enemyAtk, //combat stats
+            int enemyMaxHP, int enemyCurHP,  int enemyAtk, //combat stats - Atk needs to be 3 at minimum, otherwise defenses mean auto-counters on everything depending on ancestry/career
             int interest, int patience //negotiation stats
             ) //^Doesn't need defences. They could cause the player to deal 0 damage. Just up HP instead.
         {                                   
@@ -47,17 +47,19 @@ namespace RPG
             {
                 //enemy stat block
                 Anim.Say(
-                    $"\n{enemyName}\n" + 
-                    $"HP: {enemyCurHP} / {enemyMaxHP}\n" + //HP display
-                    $"Interest: {interest} / 10\n" + //interest (negotiation)
-                    $"Patience: {patience} / 10\n"); //patience (negotiation)
+                    $"\n{enemyName}\n" +
+                    $"HP: {enemyCurHP} / {enemyMaxHP}\n"); //HP display
+                Anim.Negotiation("Interest: ", "█", "x", interest); //test. Should return 1
+                Anim.Negotiation("Patience: ", "█", "x", patience); //test. Should return 2
+                //    $"Interest: {interest} / 5\n" + //interest (negotiation)
+                //    $"Patience: {patience} / 5\n"); //patience (negotiation)
                 if (hostile == false) { Anim.Say("open-minded\n"); } 
                 else { Anim.Say("hostile\n"); }
                 //^mood | v player actions
                 Anim.Say(
                     "====================\n" +
                     "| [T]alk  [A]ttack |\n" +
-                    "| [I]tem  [L]eave  |\n" +
+                    "| [I]tem  [L]eave  |\n" + //change item
                     "====================\n" +
                     $"Your HP: {Program.currentPlayer.playerCurHP} / {Program.currentPlayer.playerMaxHP}\n", 5
                     );
@@ -102,7 +104,7 @@ namespace RPG
                         }
                         enemyCurHP -= playerAttack;
                         //enemy turn
-                        enemyDMG = enemyAtk - playerDEF; //subtract player defenses from enemy attack
+                        enemyDMG = rand.Next(1,enemyAtk+1) - playerDEF; //subtract player defenses from enemy attack
                         if (enemyDMG <= 0) //if enemy wouldn't deal any damage...
                         {
                             //COUNTER!
