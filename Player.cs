@@ -24,6 +24,13 @@ namespace RPG
         public int playerArmour = 0; //armour defence
         public int playerCharm = 0; //negotiation mod
 
+        //super primitive INVENTORY (possible items below just to keep them in mind)
+        public List<string> inventory = new List<string>();
+        //from DREAM:
+        //soph-miro's leaf -> gift from the shy Nymph
+        //strchnos' flower -> gift from the arrogant/kinky Nymph
+
+
         //These Career/Ancestry enums are NOT actually giving any benefit. Benefit is in a switch statement on choice
         //If the choices actually give a bigger effect like custom abilities, maybe change those into extra classes
         public string[] pAncestry = {
@@ -41,7 +48,7 @@ namespace RPG
             "Duelist", //+1 Counter
             "Guard", //playerArmour +1 OR starts with armour. Depends on Inventory system
             "Noble", //starts with Money +x. Depends on shop
-            "Rogue", //gains more Gold after fights
+            "Rogue", //gains more Gold after fights (Dieb Focus)
             "Swindler" //Charm +1
         };
     }

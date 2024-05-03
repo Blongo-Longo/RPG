@@ -1,4 +1,5 @@
 ﻿using System.Net.NetworkInformation;
+using System.Runtime.ConstrainedExecution;
 
 namespace RPG
 {
@@ -214,7 +215,12 @@ namespace RPG
                 {
                     //present confidently
                     case 'p':
-                        Anim.Say("\n");
+                        Anim.Say("\n" +
+                            "Always being one that grabs attention by the scruff of its neck and twists it, you strike a pose fully revealing your best sides " +
+                            "and most interesting physical aspects. There is a murmur going though the nymphs. Like the wind blowing through leaves in waltz " +
+                            "tab. You develop an ebb and flow, where they study you for an amount of time until quieting down, leading you to change your pose. " +
+                            "Somewhere within this process, you wake up pleasantly. Feeling good about yourself, though unsure why. Sometimes days just start " +
+                            "well, don't they?");
                         break;
                     //hide
                     case 'h':
@@ -230,9 +236,10 @@ namespace RPG
                         "him your opinion, but before you can something faintly touches the back of your hand.\n" +
                         "It is a single leaf that must've been blown in through your window. It has the most beautiful sunset-red colouration you have ever seen. " +
                         "\'How odd.\' you think, \'Isn't it Spring?\'\n" +
-                        "Whatever the case may be, you decide to take it with you. It's really beautiful.\n"
+                        "Whatever the case may be, you decide to take it with you. It's really beautiful.\n" +
+                        "You gained (Soph-miro's Leaf)"
                         );
-                        //ADD: Soph-miro's Leaf to inventory (The nymph's leaf, named after extinct Sophora Toromiro Tree)
+                        currentPlayer.inventory.Add("soph-miro's leaf"); //The nymph's leaf, named after extinct Sophora Toromiro Tree
                         break;
                     //demand answers
                     case 'd':
@@ -258,9 +265,10 @@ namespace RPG
                                     " \n" +
                                     "After a pleasant dream, you wake up. Sweat runs down your neck and you feel a weird sense of pride. You move and notice that " +
                                     "something else was touching your neck. You find a breathtakingly gorgeous flower, of a kind you don't remember seeing before, " +
-                                    "gently laid on your pillow. However, something feels familiar about it.\n"
+                                    "gently laid on your pillow. However, something feels familiar about it.\n" +
+                                    "You gained (Strchnos' Flower)."
                                     );
-                                //ADD: Strchnos' Flower to inventory (The nymph's flower, named after extinct toxic flower)
+                                currentPlayer.inventory.Add("strchnos' flower"); //The nymph's flower, named after extinct toxic flower
                                 break;
                             //retreat
                             case 'u':
@@ -325,40 +333,86 @@ namespace RPG
                         Anim.Say("OLD PEOPLE DEBATE");
                         break;
                     case 'c': //see if kid needs help
-                        Anim.Say(
+                        Anim.Say("\n" +
                             "You mosey over to the well. The child is grunting and cursing, as she contineously tries to lift the " +
                             "heavy bucket and fails. \"Bwooming gwove! Why ahh you so heaby?\" she cusses as you arrive.\n" +
-                            "[a] ask if she needs help - [b] grab the bucket - [c] look for her parents\n");
+                            "[a] ask if she needs help - [b] grab the bucket - [c] look for her parents\n"
+                            );
                         choice = Console.ReadKey().KeyChar;
                         Anim.Say(""); //spacer
                         switch (choice)
                         {
                             case 'a': //help
-                                Anim.Say(
+                                Anim.Say("\n" +
                                     "\"Do you need help, young lady?\". She tries again and fails again before answering. \"Yea. " +
                                     "But I wanna do it myself!, I need to be stwong!\" She hasn't looked up, her eyes fixed on the " +
                                     "bucket she clutches with two tiny hands.\n" +
-                                    "[a] \"Strong? What for?\" - [b] Just grab the bucket - [c]\"Then you have to do it.\"\n");
+                                    "[a] \"Strong? What for?\" - [b] carry the bucket yourself - [c]\"Then you have to do it.\"\n"
+                                    );
                                 choice = Console.ReadKey().KeyChar;
                                 switch (choice)
                                 {
                                     case 'a': //help
-                                        Anim.Say(
-                                            "As you ask that, she grabs the bucket tighter. \"Mama said that. She is in bed. She is" +
+                                        Anim.Say("\n" +
+                                            "As you ask that, she grabs the bucket tighter. \"Mama said that. She is in bed. She is " +
                                             "in bed a lot.\" Finally, she looks up with determination in her eyes. \"So I said I will" +
-                                            "be stwongah dan eben de Backsmif!\"");
+                                            "be stwongah dan eben de Backsmif!\"\n" +
+                                            "[a] help her with the bucket - [b] - [c] leave her to it \n"
+                                            );
+                                        choice = Console.ReadKey().KeyChar;
+                                        switch (choice)
+                                        {
+                                            case 'a':
+                                                Anim.Say("" +
+                                                    "");
+                                                break;
+                                            case 'b':
+                                                Anim.Say("" +
+                                                    "");
+                                                break;
+                                            case 'c':
+                                                goto LEAVE_GIRL;
+                                        }
                                         break;
-                                    case 'b': //help
+                                    case 'b': //"help" by grabing the bucket
                                         Anim.Say("");
-                                        break;
-                                    case 'c': //help
-                                        Anim.Say("");
+                                        goto GRAB_BUCKET;
+                                    case 'c': //leave
+LEAVE_GIRL:
+                                        Anim.Say("\n" +
+                                            "You shrug. \"You will probably manage.\" You turn, stepping away as you hear her struggle. " +
+                                            "After a few paces, you hear something clattering behind you. You don't bother checking what " +
+                                            "that was. There are always tons of noises around, even this early. "
+                                            );
                                         break;
                                     default: Anim.Say(""); break;
                                 }
                                 break;
                             case 'b': //grab bucket
-                                Anim.Say("");
+GRAB_BUCKET:
+                                Anim.Say(
+                                    "You grab the bucket off her hands. Her big eyes look up. \"Bu-\" before she can protest, you ask " +
+                                    "her \"Where do you live again?\" A moment of shock passes over her, then she calls out \"Meanie!!! " +
+                                    "Mama said I need to bwing her watah!\"" +
+                                    "[a] try to calm her - [b] leave her to it then"
+                                    );
+                                choice = Console.ReadKey().KeyChar;
+                                switch (choice)
+                                {
+                                    case 'a':
+                                        Anim.Say(
+                                            "You give her a soft smile. \"I'm sure your Mama is thristy" +
+                                            "and would like to drink right now. Better to get this to her quickly. You can bring the next bucket\"" //CONTINUE WRITING
+                                            );
+                                        break;
+                                    case 'b': //leave girl. Have to repeat the content from LEAVE_GIRL label, for some reason goto doesn't work here?
+                                        Anim.Say(
+                                            "You shrug. \"You will probably manage.\" You turn, stepping away as you hear her struggle. " +
+                                            "After a few paces, you hear something clattering behind you. You don't bother checking what " +
+                                            "that was. There are always tons of noises around, even this early. "
+                                            );
+                                        break;
+                                }
                                 break;
                             case 'c': //look for parents
                                 Anim.Say("");
