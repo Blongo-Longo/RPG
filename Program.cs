@@ -178,12 +178,12 @@ namespace RPG
             void LeaveRoom()
             {
                 //choice point: leave room
-                Anim.Say("[t]ake a look around - [l]eave\n");
+                Anim.Say("[a] take a look around - [b] leave\n");
                 choice = Console.ReadKey().KeyChar;
                 switch (choice)
                 {
                     //look around
-                    case 't':
+                    case 'a':
                         Anim.Say("\n" +
                         "As you give the room another look, you remember your coin purse! You take it and step out.\n"
                         );
@@ -192,7 +192,7 @@ namespace RPG
                         Outside();
                         break;
                     //leave
-                    case 'l':
+                    case 'b':
                         Anim.Say("\n" +
                             "No time to dwell, you get your coat and leave your small abode.\n"
                             );
@@ -209,12 +209,12 @@ namespace RPG
 
             void Dream()
             {
-                Anim.Say("[p]resent yourself confidently - [h]ide yourself as best you can - [d]emand to know what they're doing, ogling you like this\n");
+                Anim.Say("[a] present yourself confidently - [b] hide yourself as best you can - [c] demand to know what they're doing, ogling you like this\n");
                 choice = Console.ReadKey().KeyChar;
                 switch (choice)
                 {
                     //present confidently
-                    case 'p':
+                    case 'a':
                         Anim.Say("\n" +
                             "Always being one that grabs attention by the scruff of its neck and twists it, you strike a pose fully revealing your best sides " +
                             "and most interesting physical aspects. There is a murmur going though the nymphs. Like the wind blowing through leaves in waltz " +
@@ -223,7 +223,7 @@ namespace RPG
                             "well, don't they?");
                         break;
                     //hide
-                    case 'h':
+                    case 'b':
                         Anim.Say("\n" +
                         "Thinking quickly, you dart to a close bush. It's a bit scratchy, but you feel safe now. As you look up, most of the nymphs have either " +
                         "left or just vanished (as dreams tend to do), but one remains. They have buried their face in their hands. As the wind gently roams " +
@@ -242,7 +242,7 @@ namespace RPG
                         currentPlayer.inventory.Add("soph-miro's leaf"); //The nymph's leaf, named after extinct Sophora Toromiro Tree
                         break;
                     //demand answers
-                    case 'd':
+                    case 'c':
                         Anim.Say("\n" +
                         "\"What are you gawking at, huh?\" your voice rings out over the long grass, starling the woodland creatures. \"At least " +
                         "say something nice!\" Surprised that a mortal would talk to them this way, most of them seem to vanish into the canopy. One stays. " +
@@ -250,13 +250,13 @@ namespace RPG
                         "\"Oh, there is nice to be said about me, but you? How could a mere human like you even know the word beautiful before meeting me? " +
                         "Much less think they should be compared such?\"\n" +
                         "What do you answer?\n" +
-                        "\"[I] said something nice, not beautiful. However did you come to that conclusion?\" (daring the nymph)\n\"[U]h, please don't mind me!\" (retreating)\n"
+                        "\"[a] I said something nice, not beautiful. However did you come to that conclusion?\" (daring the nymph)\n\"[b] Uh, please don't mind me!\" (retreating)\n"
                         );
                         choice = Console.ReadKey().KeyChar;
                         switch (choice)
                         {
                             //dare the nymph
-                            case 'i':
+                            case 'a':
                                 Anim.Say("\n" +
                                     "The nymph's smile grows. There is a fire in their eyes. \"I suppose\", she responds, \"you are not horribly different from us.\" " +
                                     "Their gaze wanders over you. \"But arrogance is cheap, young person. There is but one thing I am interested in. It's just a " +
@@ -271,7 +271,7 @@ namespace RPG
                                 currentPlayer.inventory.Add("strchnos' flower"); //The nymph's flower, named after extinct toxic flower
                                 break;
                             //retreat
-                            case 'u':
+                            case 'b':
                                 Anim.Say("\n" +
                                     "The nymph frowns at your cowardice. \"I had expected more from you. Well, never hurts to confirm prejudice.\"\n" +
                                     "With that she vanishes, as does the dream. You blink awake with a sense of defeat. After a moment, you shake your head, " +
@@ -301,7 +301,7 @@ namespace RPG
                 //Console.Clear(); //clear console from previous text
                 Anim.Say("\n" +
                     "As you leave, you feel the reassuring pressure of the ring on your finger.\n" +
-                    "This is a (Ring of Weapons)\n" +
+                    "This is a (Ring of Weapons).\n" +
                     "The Ring of Weapons can shift into anything you want to use as a weapon. It can also absorb any future weapon you find, " +
                     "gaining the benefits of that weapon while still retaining the shape you've chosen.\n" +
                     "So, what will it be?\n"
@@ -374,7 +374,7 @@ namespace RPG
                                                 goto LEAVE_GIRL;
                                         }
                                         break;
-                                    case 'b': //"help" by grabing the bucket
+                                    case 'b': //grab the bucket (forcefully)
                                         Anim.Say("");
                                         goto GRAB_BUCKET;
                                     case 'c': //leave
@@ -385,7 +385,8 @@ LEAVE_GIRL:
                                             "that was. There are always tons of noises around, even this early. "
                                             );
                                         break;
-                                    default: Anim.Say(""); break;
+                                    default: Anim.Say("You watch her struggle on for a while, zoned out. You better go and see to other things"); break;
+                                        //^check for an end to (or looping back of) this defaulting
                                 }
                                 break;
                             case 'b': //grab bucket
@@ -415,7 +416,49 @@ GRAB_BUCKET:
                                 }
                                 break;
                             case 'c': //look for parents
-                                Anim.Say("");
+                                Anim.Say(
+                                    "You gaze around, keeping part of your attention on the small child so you can intervene if " +
+                                    "she hurts herself. There are a smattering of people around, a few of them even peaking in " +
+                                    "your direction, but none with an air of duty. The only thing you find in their eyes is " +
+                                    "curiosity. \"Do you know where your parents are?\" you ask tentatively. The girl has put " +
+                                    "down the bucket for the moment. Her hands are still on it, but she rests with long breaths. " +
+                                    "\"Yea. Mama is at home. She needs dat watah.\" You let a moment pass to give her the opportunity " +
+                                    "to continue, but she does not.\n" +
+                                    "[a] ask more about her guardians - [b] ask if you can help - [c] leave"
+                                    );
+                                choice = Console.ReadKey().KeyChar;
+                                switch (choice)
+                                {
+                                    case 'a':
+                                        Anim.Say(
+                                            "\"Only your Mama or is there someone else? An uncle or an aunt maybe?\" you ask. " +
+                                            "She just quietly shakes her head. \"But now I can do stuff! I'm alweady big!\" \"I'm " +
+                                            "sure you are.\"\n" +
+                                            "[a] \"...but it's never bad to accept help.\" - [b] \"You'll manage.\""
+                                            );
+                                        choice = Console.ReadKey().KeyChar;
+                                        switch (choice)
+                                        {
+                                            case 'a':
+                                                Anim.Say("");
+                                                break;
+                                            case 'b':
+                                                goto LEAVE_GIRL2; //Copy of LEAVE_GIRL above
+                                        }
+                                        break;
+                                    case 'b':
+                                        Anim.Say("");
+                                        break;
+                                    case 'c':
+LEAVE_GIRL2: //Copy of LEAVE_GIRL above
+                                        Anim.Say("\n" +
+                                            "You shrug. \"You will probably manage.\" You turn, stepping away as you hear her struggle. " +
+                                            "After a few paces, you hear something clattering behind you. You don't bother checking what " +
+                                            "that was. There are always tons of noises around, even this early. "
+                                            );
+                                        break;
+                                    default: Anim.Say(""); break;
+                                }
                                 break;
                             default: Anim.Say(""); GameOver(); break;
                         }
