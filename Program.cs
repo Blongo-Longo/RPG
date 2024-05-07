@@ -334,22 +334,46 @@ namespace RPG
                             "argument. No sooner had he stopped talking that the other two fell into tones of ridicule. \"A featherless " +
                             "biped, a man?!\" Echallon Of Iron scoffed. Singraek Bynthe picked up from that with a gravelly voice. \"That " +
                             "would make any child of mine not be like me for years! You tell me mine daughter was but a creature, even though " +
-                            "she ate from our tablecloth and wore fabric made by her father?\" \"Another point as well, Ima,\" Echallon interjected. " +
-                            "\"In you entire tale have you not once mentioned what man be to you. Be it humans like you or their loins? As " +
-                            "a Lizardfolk of which you haven't seen under the fabric, would you not call me a man were I to don a feathered hat?\" " +
+                            "she ate from our tablecloth and wore fabric made by her father? Just because of her manner of traversal?\"\n" +
+                            "\"Another point as well, Ima,\" Echallon interjected. \"In thine entire tale hath thee not once mentioned what " +
+                            "man be to thee. Be it humans like thee or their loins? As a Lizardfolk of which thou hathen't seen under the fabric, " +
+                            "would thee not call me a man were I to don a feathered hat?\"\n" +
                             "Imanele tried to cut in, but Singraek waved him off, genuine anger about the very idea seeping through. \"Of course! " +
                             "Our bond of dozens of years portends you shall find an exclusion for both of our complaints! Ponder what these tells " +
-                            "of your argument, friend.\" \"Ah yes, what friends you be! Not providing me a moment of response!\" the Elder " +
-                            "interjected quickly. \"Of course 'man' shall guide to the common understanding of our combined idea of beings such " +
-                            "as we see us, as- DON'T YOU THINK TO INTERRUPT ME!\" \"Then speak he swift!\" \"I shall, after fitting you to a sum of " +
-                            "shoes, Reptile- Be that as it may, I do no contain in this a definition of privates. These shallth be musings on " +
-                            "what was called Civilized Beings in our spring years, as us all three rightfully fought counter those labels. " +
-                            "The sense I tried to impart -you boney rags- be the sense of kinship we feel shall be the norm. By being thus, " +
-                            "the mass of focus be on viewing as many such like us, not a boundary derived to exclude or shun!\"\n" +
+                            "of your argument, friend.\"\n" +
+                            "\"Ah yes, what friends yon be! Not providing me a moment of response!\" the Elder interjected quickly. \"Of course " +
+                            "'man' shall guide to the common understanding of combined idea ours' of beings such as we see us, as- DON'T YON THINK " +
+                            "TO INTERRUPT ME!\"\n" +
+                            "\"Then speak he swift!\"\n" +
+                            "\"I shall, after fitting yon to a sum of shoes, Reptile- Be that as it may, I do no contain in this a definition of" +
+                            "privates. These shalleth be musings on what was called Civilized Beings in our spring years, as us all three " +
+                            "rightfully fought counter those labels. The sense I tried to impart -yon boney rags- be the sense of kinship we " +
+                            "feel shall be the norm. By being thus, the mass of focus be on viewing as many such like us, not a boundary " +
+                            "derived to exclude or shun!\"\n" +
                             "A moments pause. Each of them looking to the other two, as they stew in the rhetoric. Simulatneously grasping " +
                             "and formulating a counter to the point just made. Gazes given to each other, like knives and embraces at the " +
-                            "same time." //continue? What can be player choices here?
+                            "same time." +
+                            "They now notice your presence. " //continue? What can be player choices here?
                             );
+                        if (currentPlayer.currentAncestry == "avian")
+                        {
+                            Anim.Say(
+                                "Echallon bursts out laughing. \"Nay, what doth we have here? A walking counter to thine assertion, Ima ol' " +
+                                "foe! So thee say this splendid personae shalln'th be of worth of thine respect? Their feather's reason?\"\n" +
+                                "\"Obviously-\", Imanele starts, \"must I correct my stance. Foolish it were for the critereion to pertain " +
+                                "any physiques for differenciation, when the crux centered hath been ceasing exclusions entirely as measure " +
+                                "of intellect or respect.\" He turns to you, a rush of red colouring his face. He ignores Songraek's \"Only a " +
+                                "Clodpate preface' an 'obviously'!\" and lowers his head. \"I must plead forgiveness. I ask to hear yon facette, " +
+                                "if willing to share.\n"
+                                );
+                        }
+                        Anim.Say(
+                            "What do you say?\n" +
+                            "[a] \"\" - [b] \"\" [c] shrug your shoulders and leave - ");
+                        if (currentPlayer.currentAncestry == "avian")
+                        {
+                            Anim.Say("[d] (avian) \"\" - [e] (avian) \"\" - [f] (avian) ");
+                        }
                         break;
                     case 'c': //see if kid needs help
                         Anim.Say("\n" +
