@@ -353,7 +353,7 @@ namespace RPG
                             "A moments pause. Each of them looking to the other two, as they stew in the rhetoric. Simulatneously grasping " +
                             "and formulating a counter to the point just made. Gazes given to each other, like knives and embraces at the " +
                             "same time." +
-                            "They now notice your presence. " //continue? What can be player choices here?
+                            "They now notice your presence." //continue? What can be player choices here?
                             );
                         if (currentPlayer.currentAncestry == "avian")
                         {
@@ -364,15 +364,15 @@ namespace RPG
                                 "any physiques for differenciation, when the crux centered hath been ceasing exclusions entirely as measure " +
                                 "of intellect or respect.\" He turns to you, a rush of red colouring his face. He ignores Songraek's \"Only a " +
                                 "Clodpate preface' an 'obviously'!\" and lowers his head. \"I must plead forgiveness. I ask to hear yon facette, " +
-                                "if willing to share.\n"
+                                "if willing to share."
                                 );
                         }
                         Anim.Say(
-                            "What do you say?\n" +
-                            "[a] \"\" - [b] \"\" [c] shrug your shoulders and leave - ");
+                            "\nWhat do you do?\n" +
+                            "[a] \"\" - [b] \"\" [c] \"I don't think it matters.\", shrug your shoulders and leave ");
                         if (currentPlayer.currentAncestry == "avian")
                         {
-                            Anim.Say("[d] (avian) \"\" - [e] (avian) \"\" - [f] (avian) ");
+                            Anim.Say("- [d] (avian) \"\" - [e] (avian) \"\" - [f] (avian) ");
                         }
                         break;
                     case 'c': //see if kid needs help
@@ -382,11 +382,10 @@ namespace RPG
                             "[a] ask if she needs help - [b] grab the bucket - [c] look for her parents\n"
                             );
                         choice = Console.ReadKey().KeyChar;
-                        Anim.Say(""); //spacer
                         switch (choice)
                         {
                             case 'a': //help
-                                Anim.Say("\n" +
+                                Anim.Say(
                                     "\"Do you need help, young lady?\". She tries again and fails again before answering. \"Yea. " +
                                     "But I wanna do it myself!, I need to be stwong!\" She hasn't looked up, her eyes fixed on the " +
                                     "bucket she clutches with two tiny hands.\n" +
@@ -406,12 +405,14 @@ namespace RPG
                                         switch (choice)
                                         {
                                             case 'a':
-                                                Anim.Say("" +
-                                                    "");
+                                                Anim.Say(
+                                                    ""
+                                                    );
                                                 break;
                                             case 'b':
-                                                Anim.Say("" +
-                                                    "");
+                                                Anim.Say(
+                                                    ""
+                                                    );
                                                 break;
                                             case 'c':
                                                 goto LEAVE_GIRL;
@@ -503,7 +504,8 @@ LEAVE_GIRL2: //Copy of LEAVE_GIRL above
                                     default: Anim.Say(""); break;
                                 }
                                 break;
-                            default: Anim.Say(""); GameOver(); break;
+                            default: Anim.Say("You zone out for a moment. In a moment of lost selfcontrol, you try to grab the " +
+                                "bucket and hurl it back into the well. You made the girl cry. You'll never hear the end of it."); GameOver(); break;
                         }
                         break;
                     default: Anim.Say(""); GameOver(); break;
